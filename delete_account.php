@@ -13,15 +13,15 @@
 
 <?php
 session_start();
-include 'db.php'; // Pastikan file ini sesuai dengan koneksi database Anda
+include 'db.php'; 
 
 if (isset($_SESSION['username'])) {
     $username = $_SESSION['username'];
 
-    // Hapus akun berdasarkan username
+
     $query = "DELETE FROM users WHERE username = '$username'";
     if (mysqli_query($conn, $query)) {
-        // Hapus session dan redirect ke halaman utama
+  
         session_destroy();
         echo "<script>
             Swal.fire({
