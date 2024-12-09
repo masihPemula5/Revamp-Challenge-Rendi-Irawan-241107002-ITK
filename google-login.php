@@ -1,13 +1,13 @@
 <?php
 session_start();
-include 'db.php'; // Pastikan file koneksi database tersedia dan benar
+include 'db.php';
 
 if (isset($_GET['code'])) {
     $client_id = '276617149835-tu30ido5i0rn1q8jnmm6nnkiouqk7jja.apps.googleusercontent.com';
     $client_secret = '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';
     $redirect_uri = 'http://localhost/UAS/google-login.php';
 
-    // Tukar kode otorisasi dengan token akses
+
     $token_request = [
         'code' => $_GET['code'],
         'client_id' => $client_id,
@@ -44,28 +44,28 @@ if (isset($_GET['code'])) {
         $user_info = json_decode($user_info_response, true);
 
         if (isset($user_info['email']) && isset($user_info['name'])) {
-            // Simpan data user di session
+            
             $_SESSION['email'] = $user_info['email'];
             $_SESSION['username'] = $user_info['name'];
 
-            // Simpan data user ke database
+            /
             $email = $user_info['email'];
             $username = $user_info['name'];
 
-            // Cek apakah user sudah ada di database
+            
             $stmt = $conn->prepare("SELECT id FROM users WHERE email = ?");
             $stmt->bind_param("s", $email);
             $stmt->execute();
             $result = $stmt->get_result();
 
             if ($result->num_rows === 0) {
-                // Jika belum ada, simpan data ke database
+    
                 $stmt = $conn->prepare("INSERT INTO users (username, email) VALUES (?, ?)");
                 $stmt->bind_param("ss", $username, $email);
                 $stmt->execute();
             }
 
-            // Redirect ke halaman dashboard
+ 
             header('Location: crud/crud.php');
             exit();
         } else {
